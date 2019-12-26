@@ -104,6 +104,7 @@ class Permission(BaseModel):
                              default=random_short_string
                             )
     permission_type = Column(Integer, nullable=False)
+    identifier = Column(String(128), nullable=False)
     status = Column(Integer, server_default=str(Status.NORMAL.value))
 
     __tablename__ = 'permission'
