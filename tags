@@ -1,0 +1,172 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.6	//
+AnonymousUser	core/ext.py	/^class AnonymousUser(AnonymousUserMixin):$/;"	c
+BaseModel	apps/admin/models.py	/^class BaseModel:$/;"	c
+BaseModel	apps/auth/models.py	/^class BaseModel:$/;"	c
+CheckPermission	apps/admin/restful.py	/^class CheckPermission(MethodView):$/;"	c
+CheckPermission	apps/auth/restful.py	/^class CheckPermission(MethodView):$/;"	c
+G	core/__init__.py	/^class G:$/;"	c
+Menu	apps/admin/models.py	/^class Menu(BaseModel):$/;"	c
+MenuHandle	apps/admin/models.py	/^class MenuHandle(BaseModel):$/;"	c
+MenuHandleManager	apps/admin/restful.py	/^class MenuHandleManager(MethodView):$/;"	c
+MenuHandleManager	apps/auth/restful.py	/^class MenuHandleManager(MethodView):$/;"	c
+MenuManager	apps/admin/restful.py	/^class MenuManager(MethodView):$/;"	c
+MenuManager	apps/auth/restful.py	/^class MenuManager(MethodView):$/;"	c
+ModelManager	core/ext.py	/^class ModelManager:$/;"	c
+Permission	apps/auth/models.py	/^class Permission(BaseModel): $/;"	c
+PlatFormPermission	apps/admin/restful.py	/^class PlatFormPermission(MethodView):$/;"	c
+PlatFormPermission	apps/auth/restful.py	/^class PlatFormPermission(MethodView):$/;"	c
+Platform	apps/admin/models.py	/^class Platform(BaseModel):$/;"	c
+Platform	apps/auth/models.py	/^class Platform(BaseModel):$/;"	c
+PlatformManager	apps/admin/restful.py	/^class PlatformManager(MethodView):$/;"	c
+PlatformManager	apps/auth/restful.py	/^class PlatformManager(MethodView):$/;"	c
+RedisSession	core/ext.py	/^class RedisSession(CallbackDict, SessionMixin):$/;"	c
+RedisSessionInterface	core/ext.py	/^class RedisSessionInterface(SessionInterface):$/;"	c
+Role	apps/admin/models.py	/^class Role(BaseModel):$/;"	c
+Role	apps/auth/models.py	/^class Role(BaseModel):$/;"	c
+RoleHandle	apps/admin/models.py	/^class RoleHandle(BaseModel):$/;"	c
+RoleManager	apps/admin/restful.py	/^class RoleManager(MethodView):$/;"	c
+RoleManager	apps/auth/restful.py	/^class RoleManager(MethodView):$/;"	c
+RoleMenuManager	apps/admin/restful.py	/^class RoleMenuManager(MethodView):$/;"	c
+RoleMenuManager	apps/auth/restful.py	/^class RoleMenuManager(MethodView):$/;"	c
+RolePermission	apps/auth/models.py	/^class RolePermission(BaseModel):$/;"	c
+SessionUser	core/ext.py	/^class SessionUser(UserMixin):$/;"	c
+Status	apps/admin/models.py	/^    class Status(Enum):$/;"	c
+Status	apps/auth/models.py	/^    class Status(Enum):$/;"	c
+Status	core/enum.py	/^class Status(IntEnum):$/;"	c
+UserPermission	apps/admin/restful.py	/^class UserPermission(MethodView):$/;"	c
+UserPermission	apps/auth/restful.py	/^class UserPermission(MethodView):$/;"	c
+UserRole	apps/admin/models.py	/^class UserRole(BaseModel):$/;"	c
+UserRole	apps/auth/models.py	/^class UserRole(BaseModel):$/;"	c
+UserRoleManager	apps/admin/restful.py	/^class UserRoleManager(MethodView):$/;"	c
+UserRoleManager	apps/auth/restful.py	/^class UserRoleManager(MethodView):$/;"	c
+_	core/logger.py	/^        def _(self, *args, **kwargs):$/;"	f
+__init__	core/ext.py	/^    def __init__($/;"	m	class:ModelManager
+__init__	core/ext.py	/^    def __init__(self, initial=None, sid=None, new=False):$/;"	m	class:RedisSession
+__init__	core/ext.py	/^    def __init__(self, redis, prefix='session:',$/;"	m	class:RedisSessionInterface
+__init__	core/ext.py	/^    def __init__(self, user_id, username, user_permissions, user_type,$/;"	m	class:SessionUser
+__str__	core/ext.py	/^    def __str__(self):$/;"	m	class:AnonymousUser	file:
+__str__	core/ext.py	/^    def __str__(self):$/;"	m	class:SessionUser	file:
+__tablename__	apps/admin/models.py	/^    def __tablename__(cls):$/;"	m	class:BaseModel	file:
+__tablename__	apps/auth/models.py	/^    def __tablename__(cls):$/;"	m	class:BaseModel	file:
+__unicode__	core/ext.py	/^    def __unicode__(self):$/;"	m	class:SessionUser	file:
+add_child_permission	apps/admin/handlers.py	/^    def add_child_permission(parent_menu, child_menus):$/;"	f
+add_child_permission	apps/auth/handlers.py	/^    def add_child_permission(parent_menu, child_menus):$/;"	f
+add_menu	apps/admin/handlers.py	/^def add_menu(platform_code, menu_name, menu_code,  sequence=1, parent_id=0, menu_level=1):$/;"	f
+add_menu	apps/auth/handlers.py	/^def add_menu(platform_code, menu_name, menu_code,  sequence=1, parent_id=0, menu_level=1):$/;"	f
+add_menu_handle	apps/admin/handlers.py	/^    def add_menu_handle(menu):$/;"	f
+add_menu_handle	apps/auth/handlers.py	/^    def add_menu_handle(menu):$/;"	f
+add_menu_interface	apps/admin/handlers.py	/^def add_menu_interface(platform_code, menu_id, handle_name, handle_code,$/;"	f
+add_menu_interface	apps/auth/handlers.py	/^def add_menu_interface(platform_code, menu_id, handle_name, handle_code,$/;"	f
+add_platform	apps/admin/handlers.py	/^def add_platform(name, code, **kwargs):$/;"	f
+add_platform	apps/auth/handlers.py	/^def add_platform(name, code, **kwargs):$/;"	f
+add_role	apps/admin/handlers.py	/^def add_role(platform_code, role_name, role_code, **kwargs):$/;"	f
+add_role	apps/auth/handlers.py	/^def add_role(platform_code, role_name, role_code, **kwargs):$/;"	f
+add_role_menu_interface	apps/admin/handlers.py	/^def add_role_menu_interface(role_id, handle_id):$/;"	f
+add_role_menu_interface	apps/auth/handlers.py	/^def add_role_menu_interface(role_id, handle_id):$/;"	f
+add_user_role	apps/admin/handlers.py	/^def add_user_role(platform_code, user_code, role_id):$/;"	f
+add_user_role	apps/auth/handlers.py	/^def add_user_role(platform_code, user_code, role_id):$/;"	f
+analysis_order_by	core/ext.py	/^    def analysis_order_by(self):$/;"	m	class:ModelManager
+check_permission	apps/admin/handlers.py	/^def check_permission(user_code, handle_code):$/;"	f
+check_permission	apps/auth/handlers.py	/^def check_permission(user_code, handle_code):$/;"	f
+class_logger	core/logger.py	/^def class_logger(cls):$/;"	f
+configure_blueprints	core/app.py	/^def configure_blueprints(app, apps):$/;"	f
+configure_errorhandlers	core/app.py	/^def configure_errorhandlers(app):$/;"	f
+configure_extensions	core/app.py	/^def configure_extensions(app):$/;"	f
+create_app	core/app.py	/^def create_app(apps):$/;"	f
+custom_error	core/app.py	/^    def custom_error(error):$/;"	f
+delete	core/ext.py	/^    def delete(self):$/;"	m	class:ModelManager
+delete_by_filter	core/ext.py	/^    def delete_by_filter(self, **kwargs):$/;"	m	class:ModelManager
+downgrade	alembic/versions/fffbd6b1370b_initdb.py	/^def downgrade():$/;"	f
+get	apps/admin/restful.py	/^    def get(self):$/;"	m	class:CheckPermission
+get	apps/admin/restful.py	/^    def get(self):$/;"	m	class:MenuHandleManager
+get	apps/admin/restful.py	/^    def get(self):$/;"	m	class:MenuManager
+get	apps/admin/restful.py	/^    def get(self):$/;"	m	class:PlatformManager
+get	apps/admin/restful.py	/^    def get(self):$/;"	m	class:RoleManager
+get	apps/admin/restful.py	/^    def get(self):$/;"	m	class:RoleMenuManager
+get	apps/admin/restful.py	/^    def get(self):$/;"	m	class:UserRoleManager
+get	apps/admin/restful.py	/^    def get(self, platform_code):$/;"	m	class:PlatFormPermission
+get	apps/admin/restful.py	/^    def get(self, user_code):$/;"	m	class:UserPermission
+get	apps/auth/restful.py	/^    def get(self):$/;"	m	class:CheckPermission
+get	apps/auth/restful.py	/^    def get(self):$/;"	m	class:MenuHandleManager
+get	apps/auth/restful.py	/^    def get(self):$/;"	m	class:MenuManager
+get	apps/auth/restful.py	/^    def get(self):$/;"	m	class:PlatformManager
+get	apps/auth/restful.py	/^    def get(self):$/;"	m	class:RoleManager
+get	apps/auth/restful.py	/^    def get(self):$/;"	m	class:RoleMenuManager
+get	apps/auth/restful.py	/^    def get(self):$/;"	m	class:UserRoleManager
+get	apps/auth/restful.py	/^    def get(self, platform_code):$/;"	m	class:PlatFormPermission
+get	apps/auth/restful.py	/^    def get(self, user_code):$/;"	m	class:UserPermission
+get_auth_code	core/utils.py	/^def get_auth_code(data, key):$/;"	f
+get_fields	core/ext.py	/^    def get_fields(self):$/;"	m	class:ModelManager
+get_ip	core/utils.py	/^def get_ip():$/;"	f
+get_platform	core/utils.py	/^def get_platform():$/;"	f
+get_platform_permissions	apps/admin/handlers.py	/^def get_platform_permissions(platform_code):$/;"	f
+get_platform_permissions	apps/auth/handlers.py	/^def get_platform_permissions(platform_code):$/;"	f
+get_redis_expiration_time	core/ext.py	/^    def get_redis_expiration_time(self, app, session):$/;"	m	class:RedisSessionInterface
+get_result	core/utils.py	/^    def get_result(model):$/;"	f
+get_user_permissions	apps/admin/handlers.py	/^def get_user_permissions(user_code):$/;"	f
+get_user_permissions	apps/auth/handlers.py	/^def get_user_permissions(user_code):$/;"	f
+id_model_map	core/utils.py	/^def id_model_map(models, key=None):$/;"	f
+limitation	core/ext.py	/^def limitation():$/;"	f
+on_update	core/ext.py	/^        def on_update(self):$/;"	m	class:RedisSession
+open_session	core/ext.py	/^    def open_session(self, app, request):$/;"	m	class:RedisSessionInterface
+paginate	core/ext.py	/^    def paginate(self):$/;"	m	class:ModelManager
+permission_tree	apps/admin/handlers.py	/^def permission_tree(first_menu, second_menu, three_menu, handles):$/;"	f
+permission_tree	apps/auth/handlers.py	/^def permission_tree(first_menu, second_menu, three_menu, handles):$/;"	f
+post	apps/admin/restful.py	/^    def post(self):$/;"	m	class:MenuHandleManager
+post	apps/admin/restful.py	/^    def post(self):$/;"	m	class:MenuManager
+post	apps/admin/restful.py	/^    def post(self):$/;"	m	class:PlatformManager
+post	apps/admin/restful.py	/^    def post(self):$/;"	m	class:RoleManager
+post	apps/admin/restful.py	/^    def post(self):$/;"	m	class:RoleMenuManager
+post	apps/admin/restful.py	/^    def post(self):$/;"	m	class:UserRoleManager
+post	apps/auth/restful.py	/^    def post(self):$/;"	m	class:MenuHandleManager
+post	apps/auth/restful.py	/^    def post(self):$/;"	m	class:MenuManager
+post	apps/auth/restful.py	/^    def post(self):$/;"	m	class:PlatformManager
+post	apps/auth/restful.py	/^    def post(self):$/;"	m	class:RoleManager
+post	apps/auth/restful.py	/^    def post(self):$/;"	m	class:RoleMenuManager
+post	apps/auth/restful.py	/^    def post(self):$/;"	m	class:UserRoleManager
+preload	preload.py	/^def preload():$/;"	f
+preload_crypto_data	preload.py	/^def preload_crypto_data():$/;"	f
+query	core/ext.py	/^    def query(self, **kwargs):$/;"	m	class:ModelManager
+query_by_id	core/ext.py	/^    def query_by_id(self, id):$/;"	m	class:ModelManager
+query_by_ids	core/ext.py	/^    def query_by_ids(self, ids):$/;"	m	class:ModelManager
+query_menu	apps/admin/handlers.py	/^def query_menu(page_size, page_num):$/;"	f
+query_menu	apps/auth/handlers.py	/^def query_menu(page_size, page_num):$/;"	f
+query_menu_interface	apps/admin/handlers.py	/^def query_menu_interface(page_size, page_num):$/;"	f
+query_menu_interface	apps/auth/handlers.py	/^def query_menu_interface(page_size, page_num):$/;"	f
+query_one_by_filter	core/ext.py	/^    def query_one_by_filter(self, **kwargs):$/;"	m	class:ModelManager
+query_platform	apps/admin/handlers.py	/^def query_platform(page_size, page_num):$/;"	f
+query_platform	apps/auth/handlers.py	/^def query_platform(page_size, page_num):$/;"	f
+query_role	apps/admin/handlers.py	/^def query_role(page_num, page_size, **kwargs):$/;"	f
+query_role	apps/auth/handlers.py	/^def query_role(page_num, page_size, **kwargs):$/;"	f
+query_role_menu_interface	apps/admin/handlers.py	/^def query_role_menu_interface(role_id, page_size, page_num):$/;"	f
+query_role_menu_interface	apps/auth/handlers.py	/^def query_role_menu_interface(role_id, page_size, page_num):$/;"	f
+query_user_role	apps/admin/handlers.py	/^def query_user_role(user_code, page_size, page_num):$/;"	f
+query_user_role	apps/auth/handlers.py	/^def query_user_role(user_code, page_size, page_num):$/;"	f
+random_short_string	apps/admin/models.py	/^def random_short_string(size=6):$/;"	f
+random_short_string	apps/auth/models.py	/^def random_short_string(size=6):$/;"	f
+request_api	core/request.py	/^def request_api(server, url, method, params):$/;"	f
+request_handler	core/app.py	/^def request_handler(app):$/;"	f
+response	core/app.py	/^    def response(res):$/;"	f
+response_handler	core/app.py	/^def response_handler(app):$/;"	f
+run_migrations_offline	alembic/env.py	/^def run_migrations_offline():$/;"	f
+run_migrations_online	alembic/env.py	/^def run_migrations_online():$/;"	f
+save	core/ext.py	/^    def save(self):$/;"	m	class:ModelManager
+save_session	core/ext.py	/^    def save_session(self, app, session, response):$/;"	m	class:RedisSessionInterface
+to_dict	apps/admin/models.py	/^    def to_dict(self):$/;"	m	class:BaseModel
+to_dict	apps/auth/models.py	/^    def to_dict(self):$/;"	m	class:BaseModel
+trace_method	core/logger.py	/^def trace_method(level=logging.INFO):$/;"	f
+trace_view	core/logger.py	/^def trace_view(level=logging.INFO):$/;"	f
+update	core/ext.py	/^    def update(self, **kwargs):$/;"	m	class:ModelManager
+update_by_filter	core/ext.py	/^    def update_by_filter(self, **kwargs):$/;"	m	class:ModelManager
+update_record	core/logger.py	/^def update_record(record, level, msg, *args):$/;"	f
+upgrade	alembic/versions/fffbd6b1370b_initdb.py	/^def upgrade():$/;"	f
+validate_auth_code	core/utils.py	/^    def validate_auth_code(auth_code, req, secret):$/;"	f
+validate_expiration	core/utils.py	/^    def validate_expiration(timestamp, interval):$/;"	f
+verify_request	core/app.py	/^    def verify_request():$/;"	f
+wrapper	core/logger.py	/^    def wrapper(func):$/;"	f
+wrapper	core/logger.py	/^    def wrapper(view):$/;"	f
