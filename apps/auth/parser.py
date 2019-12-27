@@ -46,8 +46,8 @@ permission_query.add_argument('permission_type', type=str, store_missing=False)
 
 
 role_permission = base.copy()
-role_permission.add_argument('role_id', type=inputs.positive, required=True)
-role_permission.add_argument('permission_id', type=str, required=True)
+role_permission.add_argument('role_code', type=str, required=True)
+role_permission.add_argument('permission_code', type=str, required=True)
 
 role_permission_query = paginate.copy()
 role_permission_query.add_argument('role_id', type=inputs.positive,

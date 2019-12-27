@@ -1,3 +1,5 @@
+from sqlalchemy.exc import SQLAlchemyError
+
 from core.ext import ModelManager, db
 from core.utils import id_model_map
 
@@ -68,7 +70,6 @@ def query_role(page_num=1, page_size=15, **kwargs):
 
 
 def query_permission(page_num=1, page_size=15, **kwargs):
-    print(kwargs)
     permission_manager = ModelManager(
         Permission, 
         page_size=page_size, 
@@ -88,32 +89,71 @@ def add_permission(platform_code, permission_name, permission_type):
     return ModelManager(permission).save()
 
 
-def add_role_permissions(role_id, permission_id):
-    permission_id = permission_id.split(',')
-    role = ModelManager(Role).query_by_id(role_id)
+def add_role_permissions(role_code, permission_code):
+    permission_code_list = permission_code.split(',')
+    role = ModelManager(Role).query_one_by_filter(role_code=role_code)
     if not role:
-        raise CommonError.NotExist(data={'role_id': role_id})
-    model_list = []
-    if len(permission_id) > 0:
-        permission_map = id_model_map(
-            ModelManager(Permission).query_by_ids(permission_id))
-        for id in permission_id:
-            id = int(id)
-            if id in permission_map:
-                rp = RolePermission(permission=permission_map[id], role=role)
-                model_list.append(rp)
-    else:
-        permission = ModelManager(Permission).query_by_id(permission_id)
-        if not permission:
-            raise CommonError.NotExist(data={'permission_id': permission_id})
-        rp = RolePermission(permission=permission, role=role)
-        model_list.append(rp)
+        raise CommonError.NotExist(data={'role_code': role_code})
+    
+    db_role_permissions = ModelManager(RolePermission).query(role_id=role.id)
+    model_list, surplus_permission = [], []
+    if db_role_permissions:
+        db_code_list = [
+            rp.permission.permission_code 
+            for rp in db_role_permissions
+        ]
+        surplus_permission = list(
+            set(permission_code_list) -set(db_code_list)
+        )
+    if len(surplus_permission) > 0:
+        qs = (
+            db.session
+            .query(Permission)
+            .filter(Permission.permission_code.in_(surplus_permission))
+        )
+        if qs.count() > 0:
+            permission_map = id_model_map(qs.all(), 'permission_code')
+            for code in permission_code_list:
+                if code in permission_map:
+                    rp = RolePermission(permission=permission_map[code], role=role)
+                    model_list.append(rp)
+        else:
+            raise CommonError.NotExist(data={
+                'permission_code_list': surplus_permission
+            })
     try:
         db.session.add_all(model_list)
         db.session.commit()
-    except Exception:
+    except SQLAlchemyError:
         db.session.rollback()
         raise
+    return True
+
+
+def remove_role_permissions(role_code, permission_code):
+    permission_code_list = permission_code.split(',')
+    role = ModelManager(Role).query_one_by_filter(role_code=role_code)
+    if not role:
+        raise CommonError.NotExist(data={'role_code': role_code})
+    qs = db.session
+    permission_ids = (
+        qs
+        .query(Permission.id)
+        .filter(Permission.permission_code.in_(permission_code_list))
+    )
+    qs = (
+        qs
+        .query(RolePermission)
+        .filter(RolePermission.permission_id.in_(permission_ids))
+    )
+    if qs.count() > 0:
+        try:
+            qs.delete(synchronize_session=False)
+            db.session.commit()
+        except SQLAlchemyError:
+            db.session.rollback()
+            raise
+    return True
 
 
 def query_role_permissions(page_size=15, page_num=1, **kwargs):
@@ -126,7 +166,6 @@ def query_role_permissions(page_size=15, page_num=1, **kwargs):
     if kwargs:
         rp_manager.filters = kwargs
     return rp_manager.paginate()
-
 
 
 def add_user_role(user_code, role_code):
@@ -144,6 +183,7 @@ def add_user_role(user_code, role_code):
         )
         ModelManager(user_role).save()
     return True
+
 
 def query_user_role(page_size=15, page_num=1, **kwargs):
     ur_manager = ModelManager(
@@ -172,7 +212,7 @@ def remove_user_role(user_code, role_code):
         try:
             qs.delete()
             db.session.commit()
-        except Exception:
+        except SQLAlchemyError:
             db.session.rollback()
             raise e
     return True
@@ -213,5 +253,23 @@ def get_platform_permissions(platform_code):
     return ModelManager(Permission).query(platform_code=platform_code)
 
 
+def get_user_permissions(user_code):
+    qs = db.session
+    role_ids = (
+        qs.query(UserRole.role_id)
+        .filter(
+            UserRole.user_code == user_code,
+            UserRole.status == UserRole.Status.NORMAL.value
+        )
+    )
+    role_permissions = (
+        qs.query(RolePermission)
+        .filter(RolePermission.role_id.in_(role_ids))
+    )
+    permissions = []
+    total = role_permissions.count()
+    if total > 0:
+        permissions = [rp.permission for rp in role_permissions]
+    return permissions, total
 
 

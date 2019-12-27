@@ -125,8 +125,15 @@ class RolePermissionManager(MethodView):
 
     def post(self):
         req_dict = self.parse_post.parse_args()
-        handlers.add_role_permissions(req_dict)
-        return {'status': 'add role permission success'}
+        flag = handlers.add_role_permissions(**req_dict)
+        return {'status': flag}
+
+    def delete(self):
+        req_dict = self.parse_post.parse_args()
+        flag = handlers.remove_role_permissions(**req_dict)
+        return {'status': flag}
+        
+
 
 
 @trace_view
@@ -134,7 +141,11 @@ class RolePermissionManager(MethodView):
 class UserPermission(MethodView):
 
     def get(self, user_code):
-        return handlers.get_user_permissions(user_code)
+        permissions, total = handlers.get_user_permissions(user_code)
+        return {
+            'data': marshal(permissions, fields.permission_response),
+            'total': total
+        }
 
 
 @trace_view
@@ -144,7 +155,6 @@ class CheckPermission(MethodView):
     parse_get = parser.check_permission
 
     def get(self, user_code, permission_code):
-        #req_dict = self.parse_get.parse_args()
         flag = handlers.check_permission(user_code, permission_code)
         return {'status': flag}
 
