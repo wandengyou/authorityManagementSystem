@@ -43,7 +43,7 @@ class Platform(BaseModel):
 
     platform_name = Column(String(40), nullable=False)
     platform_code = Column(String(40), unique=True, index=True, default=random_short_string)
-    platform_host = Column(String(120), nullable=False)
+    platform_host = Column(String(120))
     status = Column(Integer, server_default=str(Status.USED.value))
     description = Column(String(200))
 

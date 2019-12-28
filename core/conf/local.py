@@ -10,3 +10,5 @@ storage.SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{user}:{password}@{host}:{por
 
 AccessKey = 'access'
 SecretKey = 'secret'
+
+storage.REQUEST_VERIFY = False

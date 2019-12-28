@@ -27,12 +27,13 @@ def create_app(apps):
     configure_extensions(app)
     configure_errorhandlers(app)
     response_handler(app)
-    # request_handler(app)
+    #request_handler(app)
 
     return app
 
 
 def request_handler(app):
+    #if settings.get('REQUEST_VERIFY', ns='storage'):
     @app.before_request
     def verify_request():
         request_params = request.values.to_dict()

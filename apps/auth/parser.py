@@ -7,13 +7,17 @@ paginate.add_argument('page_size', type=inputs.positive, store_missing=False)
 paginate.add_argument('page_num', type=inputs.positive, store_missing=False)
 
 platform = base.copy()
-platform.add_argument('name', type=str, required=True)
-platform.add_argument('host', type=str, required=True)
+platform.add_argument('platform_name', type=str, required=True)
+platform.add_argument('platform_host', type=str, store_missing=False)
 platform.add_argument('description', type=str, store_missing=False)
 
 platform_query = paginate.copy()
 platform_query.add_argument('platform_name', type=str, store_missing=False)
 platform_query.add_argument('status', type=str, store_missing=False)
+
+platform_handle = paginate.copy()
+platform_handle.add_argument('platform_code', type=str, required=True)
+
 
 user = base.copy()
 user.add_argument('user_code', type=str, required=True)
@@ -50,7 +54,7 @@ role_permission.add_argument('role_code', type=str, required=True)
 role_permission.add_argument('permission_code', type=str, required=True)
 
 role_permission_query = paginate.copy()
-role_permission_query.add_argument('role_id', type=inputs.positive,
+role_permission_query.add_argument('role_code', type=str,
                                   store_missing=False)
 
 user_role = base.copy()

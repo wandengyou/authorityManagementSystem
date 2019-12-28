@@ -1,4 +1,5 @@
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy import func
 
 from core.ext import ModelManager, db
 from core.utils import id_model_map
@@ -23,7 +24,14 @@ def query_user(page_size=15, page_num=1, **kwargs):
     )
     if kwargs:
         user_manager.filters = kwargs
-    return user_manager.paginate()
+    users, total = user_manager.paginate()
+    if total > 0:
+        user_role_map = user_role_statistic()
+        for user in users:
+            user['role_total'] = user_role_map.get(
+                user['user_code'], 0
+            )
+    return users, total
 
 
 def query_platform(page_size=15, page_num=1, **kwargs):
@@ -34,19 +42,44 @@ def query_platform(page_size=15, page_num=1, **kwargs):
     )
     if kwargs:
         platform_manager.filters = kwargs
-    return platform_manager.paginate()
+    
+    platforms, total = platform_manager.paginate()
+
+    if total > 0:
+        permission_map = platform_permission_statistic()
+        role_map = platform_role_statistic()
+        user_map = platform_user_statistic()
+        for platform in platforms:
+            platform['permission_total'] = permission_map.get(
+                platform['platform_code'], 0
+            )
+            platform['role_total'] = role_map.get(
+                platform['platform_code'], 0
+            )
+            platform['user_total'] = user_map.get(
+                platform['platform_code'], 0
+            )
+    return platforms, total
 
 
-def add_platform(name, host, **kwargs):
+def add_platform(platform_name, **kwargs):
     platform = Platform(
-        platform_name=name,
-        platform_host=host,
-
+        platform_name=platform_name,
     )
     if kwargs:
         for key, value in kwargs.items():
             setattr(platform, key, value)
     return ModelManager(platform).save()
+
+
+def platform_handle(platform_code, status):
+    platform_manager = ModelManager(Platform)
+    platform = platform_manager.query_one_by_filter(platform_code=platform_code)
+    if not platform:
+        raise CommonError.NotExist(data={'platform_code': platform_code})
+    platform_manager.update(status=status)
+    return True
+
 
 
 def add_role(platform_code, role_name, description=None):
@@ -66,7 +99,14 @@ def query_role(page_num=1, page_size=15, **kwargs):
     )
     if kwargs:
         role_manager.filters = kwargs
-    return role_manager.paginate()
+    roles, total = role_manager.paginate()
+    if total > 0:
+        permission_map = role_permission_statistic()
+        for role in roles:
+            role['permission_total'] = permission_map.get(
+                role['id'], 0
+            )
+    return roles, total
 
 
 def query_permission(page_num=1, page_size=15, **kwargs):
@@ -164,7 +204,12 @@ def query_role_permissions(page_size=15, page_num=1, **kwargs):
         serialize=False
     )
     if kwargs:
-        rp_manager.filters = kwargs
+        role = ModelManager(Role).query_one_by_filter(
+            role_code=kwargs['role_code']
+        )
+        if not role:
+            raise CommonError.NotExist(data={'role_code': kwargs['role_code']})
+        rp_manager.filters = {'role_id': role.id}
     return rp_manager.paginate()
 
 
@@ -271,5 +316,110 @@ def get_user_permissions(user_code):
     if total > 0:
         permissions = [rp.permission for rp in role_permissions]
     return permissions, total
+
+
+def get_user_role(user_code, page_size=15, page_num=1):
+    user = ModelManager(User).query_one_by_filter(user_code=user_code)
+    if not user:
+        raise CommonError.NotExist(data={'user_code': user_code})
+    manager = ModelManager(
+        UserRole,
+        page_size=page_size,
+        page_num=page_num,
+        serialize=False,
+        filters={'user_code':user_code}
+    )
+    user_roles, total = manager.paginate()
+    roles = []
+    if total > 0:
+        role_permission_map = role_permission_statistic()
+        for ur in user_roles:
+            role = ur.role.to_dict()
+            role['permission_total'] = role_permission_map.get(
+                role['id'], 0
+            )
+            roles.append(role)
+    return roles, total
+
+
+def platform_permission_statistic(platform_code=None):
+    qs = (
+        db.session.query(Permission.platform_code,
+                         func.count(Permission.id).label('count'))
+        .group_by(Permission.platform_code)
+    )
+    if platform_code:
+        qs.filter_by(platform_code == platform_code)
+    permission_map = {}
+    if qs.count() > 0:
+        for statistic in qs.all():
+            permission_map[statistic.platform_code] = statistic.count
+    return permission_map
+
+
+def platform_role_statistic(platform_code=None):
+    qs = (
+        db.session.query(Role.platform_code,
+                         func.count(Role.id).label('count'))
+        .group_by(Role.platform_code)
+    )
+    if platform_code:
+        qs.filter_by(platform_code == platform_code)
+    role_map = {}
+    if qs.count() > 0:
+        for statistic in qs.all():
+            role_map[statistic.platform_code] = statistic.count
+    return role_map
+
+
+def platform_user_statistic(platform_code=None):
+    qs = (
+        db.session.query(User.platform_code,
+                         func.count(User.id).label('count'))
+        .group_by(User.platform_code)
+    )
+    if platform_code:
+        qs.filter_by(platform_code == platform_code)
+    user_map = {}
+    if qs.count() > 0:
+        for statistic in qs.all():
+            user_map[statistic.platform_code] = statistic.count
+    return user_map
+
+
+def role_permission_statistic(role_id=None):
+    qs = (
+        db.session.query(
+            RolePermission.role_id,
+            func.count(RolePermission.id).label('count')
+        )
+        .group_by(RolePermission.role_id)
+    )
+    print(qs)
+    if role_id:
+        qs.filter_by(role_id == role_id)
+    role_permission_map = {}
+    if qs.count() > 0:
+        for statistic in qs.all():
+            role_permission_map[statistic.role_id] = statistic.count
+    return role_permission_map
+
+
+def user_role_statistic(user_code=None):
+    qs = (
+        db.session.query(
+            UserRole.user_code,
+            func.count(UserRole.id).label('count')
+        )
+        .group_by(UserRole.user_code)
+    )
+    if user_code:
+        qs.filter_by(user_code == user_code)
+    user_role_map = {}
+    if qs.count() > 0:
+        for statistic in qs.all():
+            user_role_map[statistic.user_code] = statistic.count
+    return user_role_map
+
 
 

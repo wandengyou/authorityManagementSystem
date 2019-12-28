@@ -3,6 +3,7 @@ from flask_restful import marshal
 
 from core.logger import class_logger, trace_view
 
+from .models import Platform
 from . import handlers
 from . import parser
 from . import fields
@@ -10,7 +11,7 @@ from . import fields
 
 @trace_view
 @class_logger
-class UserRoleManager(MethodView):
+class AssignRole(MethodView):
 
     def post(self, user_code, role_code):
         flag = handlers.add_user_role(user_code, role_code)
@@ -23,23 +24,51 @@ class UserRoleManager(MethodView):
 
 @trace_view
 @class_logger
+class UserRole(MethodView):
+
+    def get(self, user_code):
+        roles, total = handlers.get_user_role(user_code)
+        return {'data': roles, 'total': total}
+
+
+
+@trace_view
+@class_logger
 class PlatformManager(MethodView):
 
     parse_get = parser.platform_query
     parse_post = parser.platform
+    parse_put = parser.platform_handle
+    parse_del = parser.platform_handle
 
     def get(self):
         req_dict = self.parse_get.parse_args()
         platforms, total = handlers.query_platform(**req_dict)
         return {
             'data': marshal(platforms, fields.platform_response),
-            'total': total
+            'total': total,
         }
 
     def post(self):
         req_dict = self.parse_post.parse_args()
         platform = handlers.add_platform(**req_dict)
         return marshal(platform, fields.platform_response)
+
+    def put(self):
+        req_dict = self.parse_put.parse_args()
+        flag = handlers.platform_handle(
+            req_dict['platform_code'], 
+            Platform.Status.USED.value
+        )
+        return {'status': flag}
+
+    def delete(self):
+        req_dict = self.parse_put.parse_args()
+        flag = handlers.platform_handle(
+            req_dict['platform_code'], 
+            Platform.Status.FORBIDDEN.value
+        )
+        return {'status': flag}
 
 
 @trace_view
@@ -166,3 +195,5 @@ class PlatFormPermission(MethodView):
     def get(self, platform_code):
         permissions =  handlers.get_platform_permissions(platform_code)
         return marshal(permissions, fields.permission_response)
+
+
