@@ -1,3 +1,4 @@
+import pandas as pd
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import func
 
@@ -72,12 +73,12 @@ def add_platform(platform_name, **kwargs):
     return ModelManager(platform).save()
 
 
-def platform_handle(platform_code, status):
+def platform_handle(platform_code, status, **kwargs):
     platform_manager = ModelManager(Platform)
     platform = platform_manager.query_one_by_filter(platform_code=platform_code)
     if not platform:
         raise CommonError.NotExist(data={'platform_code': platform_code})
-    platform_manager.update(status=status)
+    platform_manager.update(status=status, **kwargs)
     return True
 
 
@@ -109,6 +110,15 @@ def query_role(page_num=1, page_size=15, **kwargs):
     return roles, total
 
 
+def update_role(role_code, **kwargs):
+    role_manager = ModelManager(Role)
+    role = role_manager.query_one_by_filter(role_code=role_code)
+    if not role:
+        raise CommonError.NotExist(data={'role_code': role_code})
+    role_manager.update(**kwargs)
+    return True
+
+
 def query_permission(page_num=1, page_size=15, **kwargs):
     permission_manager = ModelManager(
         Permission, 
@@ -120,13 +130,25 @@ def query_permission(page_num=1, page_size=15, **kwargs):
     return permission_manager.paginate()
 
 
-def add_permission(platform_code, permission_name, permission_type):
+def add_permission(platform_code, permission_name, permission_type, identifier):
     permission = Permission(
         platform_code=platform_code,
         permission_name=permission_name,
         permission_type=permission_type,
+        identifier=identifier
     )
     return ModelManager(permission).save()
+
+
+def update_permission(permission_code, **kwargs):
+    permission_manager = ModelManager(Permission)
+    permission = permission_manager.query_one_by_filter(
+        permission_code=permission_code
+    )
+    if not permission:
+        raise CommonError.NotExist(data={'permission_code': permission_code})
+    permission_manager.update(**kwargs)
+    return True
 
 
 def add_role_permissions(role_code, permission_code):
@@ -145,6 +167,8 @@ def add_role_permissions(role_code, permission_code):
         surplus_permission = list(
             set(permission_code_list) -set(db_code_list)
         )
+    else:
+        surplus_permission = permission_code_list
     if len(surplus_permission) > 0:
         qs = (
             db.session
@@ -184,7 +208,10 @@ def remove_role_permissions(role_code, permission_code):
     qs = (
         qs
         .query(RolePermission)
-        .filter(RolePermission.permission_id.in_(permission_ids))
+        .filter(
+            RolePermission.role_id == role.id, 
+            RolePermission.permission_id.in_(permission_ids)
+        )
     )
     if qs.count() > 0:
         try:
@@ -340,6 +367,28 @@ def get_user_role(user_code, page_size=15, page_num=1):
             )
             roles.append(role)
     return roles, total
+
+def import_permission(platform_code, data_stream, **kwargs):
+    df = pd.read_json(data_stream)
+    permissions = []
+    for index, row in df.iterrows():
+        permission = Permission(
+            platform_code=platform_code,
+            permission_name=row.permission_name,
+            permission_type=row.permission_type,
+            identifier=row.identifier
+        )
+        permissions.append(permission)
+    if 'storage' in kwargs and kwargs['storage'] > 0:
+        try:
+            db.session.add_all(permissions)
+            db.session.commit()
+        except SQLAlchemyError:
+            db.session.rollback()
+            raise
+    return permissions
+
+
 
 
 def platform_permission_statistic(platform_code=None):

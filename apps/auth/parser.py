@@ -17,7 +17,8 @@ platform_query.add_argument('status', type=str, store_missing=False)
 
 platform_handle = paginate.copy()
 platform_handle.add_argument('platform_code', type=str, required=True)
-
+platform_handle.add_argument('platform_name', type=str, store_missing=False)
+platform_handle.add_argument('description', type=str, store_missing=False)
 
 user = base.copy()
 user.add_argument('user_code', type=str, required=True)
@@ -37,10 +38,15 @@ role_query = paginate.copy()
 role_query.add_argument('platform_code', type=str, store_missing=False)
 role_query.add_argument('role_name', type=str, store_missing=False)
 
+role_update = base.copy()
+role_update.add_argument('role_code', type=str, required=True)
+role_update.add_argument('role_name', type=str, store_missing=False)
+
 permission = base.copy()
 permission.add_argument('platform_code', type=str, required=True)
 permission.add_argument('permission_name', type=str, required=True)
 permission.add_argument('permission_type', type=str, required=True)
+permission.add_argument('identifier', type=str, required=True)
 
 permission_query = paginate.copy()
 permission_query.add_argument('platform_code', type=str, store_missing=False)
@@ -48,6 +54,11 @@ permission_query.add_argument('permission_name', type=str, store_missing=False)
 permission_query.add_argument('permission_code', type=str, store_missing=False)
 permission_query.add_argument('permission_type', type=str, store_missing=False)
 
+permission_update = base.copy()
+permission_update.add_argument('permission_code', type=str, required=True)
+permission_update.add_argument('permission_name', type=str, store_missing=False)
+permission_update.add_argument('permission_type', type=str, store_missing=False)
+permission_update.add_argument('identifier', type=str, store_missing=False)
 
 role_permission = base.copy()
 role_permission.add_argument('role_code', type=str, required=True)
@@ -71,4 +82,5 @@ check_permission = base.copy()
 check_permission.add_argument('user_code', type=str, required=True)
 check_permission.add_argument('permission_code', type=str, required=True)
 
-
+data_import = base.copy()
+data_import.add_argument('storage', type=int, store_missing=False)

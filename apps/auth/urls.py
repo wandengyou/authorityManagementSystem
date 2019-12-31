@@ -18,3 +18,9 @@ api.add_resource(
 api.add_resource(restful.UserPermission, '/permission/<string:user_code>/')
 api.add_resource(restful.UserRole, '/role/<string:user_code>/')
 api.add_resource(restful.PlatFormPermission, '/platform/<string:platform_code>/')
+
+api.add_resource(restful.ImportPermission, '/import/<string:platform_code>/')
+
+
+
+

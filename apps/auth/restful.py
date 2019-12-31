@@ -1,3 +1,5 @@
+import pandas as pd
+from flask import request
 from flask.views import MethodView
 from flask_restful import marshal
 
@@ -57,8 +59,8 @@ class PlatformManager(MethodView):
     def put(self):
         req_dict = self.parse_put.parse_args()
         flag = handlers.platform_handle(
-            req_dict['platform_code'], 
-            Platform.Status.USED.value
+            status=Platform.Status.USED.value,
+            **req_dict
         )
         return {'status': flag}
 
@@ -77,6 +79,7 @@ class RoleManager(MethodView):
 
     parse_get = parser.role_query
     parse_post = parser.role
+    parse_put = parser.role_update
 
     def get(self):
         req_dict = self.parse_get.parse_args()
@@ -91,6 +94,12 @@ class RoleManager(MethodView):
         role = handlers.add_role(**req_dict)
         return marshal(role, fields.role_response)
 
+    def put(self):
+        req_dict = self.parse_put.parse_args()
+        flag = handlers.update_role(**req_dict)
+        return {'status': flag}
+
+
 
 @trace_view
 @class_logger
@@ -98,6 +107,7 @@ class PermissionManager(MethodView):
 
     parse_get = parser.permission_query
     parse_post = parser.permission
+    parse_put = parser.permission_update
     
     def get(self):
         req_dict = self.parse_get.parse_args()
@@ -111,6 +121,12 @@ class PermissionManager(MethodView):
         req_dict = self.parse_post.parse_args()
         permission = handlers.add_permission(**req_dict)
         return marshal(permission, fields.permission_response)
+    
+    def put(self):
+        req_dict = self.parse_put.parse_args()
+        print(req_dict)
+        flag = handlers.update_permission(**req_dict)
+        return {'status': flag}
 
 
 @trace_view
@@ -197,3 +213,20 @@ class PlatFormPermission(MethodView):
         return marshal(permissions, fields.permission_response)
 
 
+@trace_view
+@class_logger
+class ImportPermission(MethodView):
+
+    parse_post = parser.data_import
+
+    def post(self, platform_code):
+        req_dict = self.parse_post.parse_args()
+        file = request.files['file']
+        permissions = handlers.import_permission(
+            platform_code, file, **req_dict
+        )
+        return {
+            'data': marshal(permissions, fields.permission_response),
+            'total': len(permissions)
+        }
+       
