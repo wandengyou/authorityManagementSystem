@@ -10,12 +10,17 @@ from .error import CommonError
 
 
 def register(platform_code, user_code):
-    user = User(
+    user = ModelManager(User).query_one_by_filter(
         platform_code=platform_code,
         user_code=user_code
     )
-    ModelManager(user).save()
-
+    if not user:
+        user = User(
+            platform_code=platform_code,
+            user_code=user_code
+        )
+        ModelManager(user).save()
+    return True
 
 def query_user(page_size=15, page_num=1, **kwargs):
     user_manager = ModelManager(
@@ -369,7 +374,11 @@ def get_user_role(user_code, page_size=15, page_num=1):
     return roles, total
 
 def import_permission(platform_code, data_stream, **kwargs):
-    df = pd.read_json(data_stream)
+    try:
+        df = pd.read_json(data_stream)
+    except Exception:
+        raise CommonError.AnalyzeError(data={'filename': data_stream.filename})
+
     permissions = []
     for index, row in df.iterrows():
         permission = Permission(

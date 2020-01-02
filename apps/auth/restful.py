@@ -146,8 +146,8 @@ class UserManager(MethodView):
 
     def post(self):
         req_dict = self.parse_post.parse_args()
-        handlers.register(**req_dict)
-        return {'status': 'successful user registration'}
+        flag = handlers.register(**req_dict)
+        return {'status': flag}
 
 
 @trace_view
