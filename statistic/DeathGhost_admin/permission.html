@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>权限管理系统</title>
+<meta name="author" content="wandengyou" />
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+<link rel="icon" href="images/icon/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+<script src="javascript/jquery.js"></script>
+<script src="js/urls.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/user.js"></script>
+</head>
+<script>
+function fill_permission_template(form_handle, ajax_response){
+	if(ajax_response['code'] == 200){
+		form_handle.empty()
+		var permissions = ajax_response['data']['data']
+		$.each(permissions, function(index, permission){
+			console.log(permission)
+			var tr = '<tr class="cen">'+
+				'<td><input type="checkbox" class="permission_checkbox" name="'+permission['permission_code']+'"/></td>'+
+				'<td>'+permission['permission_name']+'</td>'+
+				'<td>'+permission['permission_code']+'</td>'+
+				'<td>'+permission['permission_type']+'</td>'+
+				'<td>'+permission['identifier']+'</td>'+
+			'</tr>'
+			form_handle.append(tr)
+		})
+	}
+}
+	$(function(){
+		var request_params = getRequest()
+		var response = ajax(request_urls['permission'], 'get', {'platform_code': request_params.platform_code})
+		fill_permission_template($('#permission tbody'), response)
+	})
+</script>
+<body>
+	<table class="table mb-15" id="permission">
+		<thead>
+			<tr>
+				<th><input type="checkbox"/></th>
+				<th>权限名称</th>
+				<th>唯一标识</th>
+				<th>权限类型</th>
+				<th>权限标识</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+</body>
+</html>
